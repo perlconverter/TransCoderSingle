@@ -53,8 +53,19 @@ JAVA_CHAR2TOKEN = {'#': ' STOKEN0 ',
                      "'''": ' STOKEN3 '
                      }
 
-CPP_TOKEN2CHAR = JAVA_TOKEN2CHAR.copy()
-CPP_CHAR2TOKEN = JAVA_CHAR2TOKEN.copy()
+CPP_TOKEN2CHAR = {'STOKEN0': "//",
+                   'STOKEN1': "/*",
+                   'STOKEN2': "*/",
+                   'STOKEN3': "/**",
+                  'STOKEN5': '"""',
+                   'STOKEN6': '\\n'
+                   }
+CPP_CHAR2TOKEN = {"//": ' STOKEN0 ',
+                   "/*": ' STOKEN1 ',
+                   "*/": ' STOKEN2 ',
+                 "**/": ' STOKEN4 ',
+                 '\\n': ' STOKEN6 '
+                 }
 
 PYTHON_TOKEN2CHAR = {'STOKEN0': '#',
                      'STOKEN1': "\\n",
