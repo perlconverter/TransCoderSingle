@@ -21,29 +21,37 @@ from preprocessing.src.timeout import timeout, TimeoutError
 from sacrebleu import tokenize_v14_international
 
 TOK_NO_SPACE_BEFORE = {',', ';'}
-clang.cindex.Config.set_library_path('/usr/lib/llvm-7/lib/')
+clang.cindex.Config.set_library_file('/usr/lib/x86_64-linux-gnu/libclang-6.0.so.1')
 STRINGS_AND_COMMENTS_TOKEN_KINDS = {TokenKind.LITERAL, TokenKind.COMMENT}
 logging.basicConfig(
     filename='timeout_cpp_tokenizer_examples.log', level=logging.DEBUG)
 
 idx = clang.cindex.Index.create()
 
-JAVA_TOKEN2CHAR = {'STOKEN0': "//",
-                   'STOKEN1': "/*",
-                   'STOKEN2': "*/",
-                   'STOKEN3': "/**",
-                   'STOKEN4': "**/",
-                   'STOKEN5': '"""',
-                   'STOKEN6': '\\n'
-                   }
-JAVA_CHAR2TOKEN = {"//": ' STOKEN0 ',
-                   "/*": ' STOKEN1 ',
-                   "*/": ' STOKEN2 ',
-                   "/**": ' STOKEN3 ',
-                   "**/": ' STOKEN4 ',
-                   '"""': ' STOKEN5 ',
-                   '\\n': ' STOKEN6 '
-                   }
+#JAVA_TOKEN2CHAR = {'STOKEN0': "//",
+ #                  'STOKEN1': "/*",
+  #                 'STOKEN2': "*/",
+   #                'STOKEN3': "/**",
+    #              'STOKEN5': '"""',
+     #              'STOKEN6': '\\n'
+      #             }
+#JAVA_CHAR2TOKEN = {"//": ' STOKEN0 ',
+ #                  "/*": ' STOKEN1 ',
+  #                 "*/": ' STOKEN2 ',
+   ##               "**/": ' STOKEN4 ',
+     ##             '\\n': ' STOKEN6 '
+       #            }
+JAVA_TOKEN2CHAR = {'STOKEN0': '#',
+                     'STOKEN1': "\\n",
+                     'STOKEN2': '"""',
+                     'STOKEN3': "'''"
+                     }
+
+JAVA_CHAR2TOKEN = {'#': ' STOKEN0 ',
+                     "\\n": ' STOKEN1 ',
+                     '"""': ' STOKEN2 ',
+                     "'''": ' STOKEN3 '
+                     }
 
 CPP_TOKEN2CHAR = JAVA_TOKEN2CHAR.copy()
 CPP_CHAR2TOKEN = JAVA_CHAR2TOKEN.copy()
