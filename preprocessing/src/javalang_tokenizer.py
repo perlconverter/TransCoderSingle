@@ -1,3 +1,4 @@
+
 # Copyright (c) 2019-present, Facebook, Inc.
 # All rights reserved.
 #
@@ -128,7 +129,7 @@ class Operator(JavaToken):
     VALUES = set(['>>>=', '>>=', '<<=', '%=', '^=', '|=', '&=', '/=',
                   '*=', '-=', '+=', '<<', '--', '++', '||', '&&', '!=',
                   '>=', '<=', '==', '%', '^', '|', '&', '/', '*', '-',
-                  '+', ':', '?', '~', '!', '<', '>', '=', '...', '->', '::'])
+                  '+', ':', '?', '~', '!', '<', '>', '=', '...', '->', '::', '\\'])
 
     # '>>>' and '>>' are excluded so that >> becomes two tokens and >>> becomes
     # three. This is done because we can not distinguish the operators >> and
@@ -278,13 +279,13 @@ class JavaTokenizer(object):
         return False
 
     def read_comment(self):
-        if self.data[self.i + 1] == '/':
+        
+        if self.data[self.i] == '#':
             terminator, accept_eof = '\n', True
-        else:
-            terminator, accept_eof = '*/', False
 
-        i = self.data.find(terminator, self.i + 2)
-
+        i = self.data.find(terminator, self.i + 1)
+        
+        
         if i != -1:
             i += len(terminator)
         elif accept_eof:
@@ -528,9 +529,9 @@ class JavaTokenizer(object):
             token_type = None
 
             c = self.data[self.i]
+            #print(c)
             c_next = None
             startswith = c
-
             if self.i + 1 < self.length:
                 c_next = self.data[self.i + 1]
                 startswith = c + c_next
@@ -539,9 +540,13 @@ class JavaTokenizer(object):
                 self.consume_whitespace()
                 continue
 
-            elif startswith in ("//", "/*"):
+            #elif startswith in ("#"):
+            elif c == '#':   
+                #print("inside if")
                 comment = self.read_comment()
-                if comment.startswith("/**"):
+                #print(comment)
+                if comment.startswith("#"):
+                    #print("inside if")
                     self.javadoc = comment
                 if keep_comments:
                     token_type = Comment
@@ -675,3 +680,4 @@ def reformat_tokens(tokens):
     output.append('\n')
 
     return ''.join(output)
+
