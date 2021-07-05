@@ -70,10 +70,12 @@ def process_and_tokenize_json_file(input_path, language, keep_comments):
     paths = []
     for line in fileinput.input(str(input_path), openhook=fileinput.hook_compressed):
         x = json.loads(line)
-        content = x['content']
-        path = f"{x['repo_name']}/tree/master/{x['path']}"
-        docs.append((tokenizer, content, path, keep_comments))
-
+        try:
+            content = x['content']
+            path = f"{x['repo_name']}/tree/master/{x['path']}"
+            docs.append((tokenizer, content, path, keep_comments))
+        except:
+            {}
     f_tok = open(output_path, 'w', encoding='utf-8')
     try:
         output_all_tokenized_results(docs, f_tok)
