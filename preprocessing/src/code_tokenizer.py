@@ -305,8 +305,6 @@ def extract_functions_python(s):
                 token = next(tokens)
         except StopIteration:
             break
-    print("Standalone --Python-->-",functions_standalone)
-    print("class--Python--->",functions_class)
     return functions_standalone, functions_class
 
 
@@ -533,46 +531,46 @@ def extract_functions_java(s):
             # detect function
                 if token == ')' and (tokens[i.i + 1] == '{' ):
                 # go previous until the start of function
-                while token not in [';', '}', '{', 'ENDCOM']:
-                    i.prev()
-                    token = tokens[i.i]
-
-              
-                if token == 'ENDCOM':
-                    while token != '#':
+                    while token not in [';', '}', '{', 'ENDCOM']:
                         i.prev()
                         token = tokens[i.i]
-                    function = [token]
-                    while token != 'ENDCOM':
+
+              
+                    if token == 'ENDCOM':
+                        while token != '#':
+                            i.prev()
+                            token = tokens[i.i]
+                        function = [token]
+                        while token != 'ENDCOM':
+                            i.next()
+                            token = tokens[i.i]
+                            function.append(token)
+                    else:
+                        i.next()
+                        token = tokens[i.i]
+                        function = [token]
+
+                    while token != '{':
                         i.next()
                         token = tokens[i.i]
                         function.append(token)
-                else:
-                    i.next()
-                    token = tokens[i.i]
-                    function = [token]
-
-                while token != '{':
-                    i.next()
-                    token = tokens[i.i]
-                    function.append(token)
-                if token == '{':
-                    number_indent = 1
-                    while not (token == '}' and number_indent == 0):
-                        try:
-                            i.next()
-                            token = tokens[i.i]
-                            if token == '{':
-                                number_indent += 1
-                            elif token == '}':
-                                number_indent -= 1
-                            function.append(token)
-                        except StopIteration:
-                            break
-                    if '::' in function[0:function.index('(')]:
-                        functions_standalone.append(function)
-                    else:
-                        functions_class.append(function)
+                    if token == '{':
+                        number_indent = 1
+                        while not (token == '}' and number_indent == 0):
+                            try:
+                                i.next()
+                                token = tokens[i.i]
+                                if token == '{':
+                                    number_indent += 1
+                                elif token == '}':
+                                    number_indent -= 1
+                                function.append(token)
+                            except StopIteration:
+                                break
+                        if '::' in function[0:function.index('(')]:
+                            functions_standalone.append(function)
+                        else:
+                            functions_class.append(function)
             i.next()
             token = tokens[i.i]
         except KeyboardInterrupt:
