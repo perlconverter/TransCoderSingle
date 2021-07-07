@@ -577,7 +577,8 @@ def extract_functions_java(s):
                                     number_indent += 1
                                 elif token == '}':
                                     number_indent -= 1
-                                print("line--580")
+                                if(token == 'if'):
+                                    print("line--580")
                                 function.append(token)
                             except StopIteration:
                                 break
