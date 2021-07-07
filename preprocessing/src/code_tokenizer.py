@@ -509,6 +509,7 @@ def detokenize_java(s):
 
 
 
+
 def extract_functions_java(s):
     tokens = s.split()
     i = ind_iter(len(tokens))
@@ -522,8 +523,13 @@ def extract_functions_java(s):
         return [], []
     while True:
         try:
+            if token == 'sub':
+                while token != ')':
+                    i.next()
+                    token=tokens[i.i]
+
             # detect function
-            if token == ')' and (tokens[i.i + 1] == '{' ):
+                if token == ')' and (tokens[i.i + 1] == '{' ):
                 # go previous until the start of function
                 while token not in [';', '}', '{', 'ENDCOM']:
                     i.prev()
