@@ -28,7 +28,7 @@ logging.basicConfig(
 
 idx = clang.cindex.Index.create()
 
-JAVA_TOKEN2CHAR = {'STOKEN0': "//",
+JAVA_TOKEN2CHAR1 = {'STOKEN0': "//",
                    'STOKEN1': "/*",
                    'STOKEN2': "*/",
                    'STOKEN3': "/**",
@@ -36,7 +36,7 @@ JAVA_TOKEN2CHAR = {'STOKEN0': "//",
                    'STOKEN5': '"""',
                    'STOKEN6': '\\n'
                    }
-JAVA_CHAR2TOKEN = {"//": ' STOKEN0 ',
+JAVA_CHAR2TOKEN1 = {"//": ' STOKEN0 ',
                    "/*": ' STOKEN1 ',
                    "*/": ' STOKEN2 ',
                    "/**": ' STOKEN3 ',
@@ -45,8 +45,8 @@ JAVA_CHAR2TOKEN = {"//": ' STOKEN0 ',
                    '\\n': ' STOKEN6 '
                    }
 
-CPP_TOKEN2CHAR = JAVA_TOKEN2CHAR.copy()
-CPP_CHAR2TOKEN = JAVA_CHAR2TOKEN.copy()
+CPP_TOKEN2CHAR = JAVA_TOKEN2CHAR1.copy()
+CPP_CHAR2TOKEN = JAVA_CHAR2TOKEN1.copy()
 
 PYTHON_TOKEN2CHAR = {'STOKEN0': '#',
                      'STOKEN1': "\\n",
@@ -55,6 +55,18 @@ PYTHON_TOKEN2CHAR = {'STOKEN0': '#',
                      }
 
 PYTHON_CHAR2TOKEN = {'#': ' STOKEN0 ',
+                     "\\n": ' STOKEN1 ',
+                     '"""': ' STOKEN2 ',
+                     "'''": ' STOKEN3 '
+                     }
+
+JAVA_TOKEN2CHAR = {'STOKEN0': '#',
+                     'STOKEN1': "\\n",
+                     'STOKEN2': '"""',
+                     'STOKEN3': "'''"
+                     }
+
+JAVA_CHAR2TOKEN = {'#': ' STOKEN0 ',
                      "\\n": ' STOKEN1 ',
                      '"""': ' STOKEN2 ',
                      "'''": ' STOKEN3 '
@@ -682,7 +694,7 @@ def extract_functions_cpp(s):
                         function = clean_hashtags_functions_cpp(function)
                         function = function.strip()
                         function = function.replace(
-                            '\n', 'ENDCOM').replace('SPACETOKEN', '▁')
+                            '\n', 'ENDCOM').replace('SPACETOKEN', '▁')-
                         if not re.sub('[^ ]*[ ][(][ ]\w*([ ][,][ ]\w*)*[ ][)]', "", function[:function.index('{')]).strip().startswith('{') and not function.startswith('#'):
                             functions_class.append(function)
             i.next()
