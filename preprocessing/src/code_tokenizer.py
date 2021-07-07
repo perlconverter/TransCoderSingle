@@ -531,7 +531,7 @@ def extract_functions_java(s):
 
               
                 if token == 'ENDCOM':
-                    while token != '//':
+                    while token != '#':
                         i.prev()
                         token = tokens[i.i]
                     function = [token]
