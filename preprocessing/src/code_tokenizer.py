@@ -305,6 +305,8 @@ def extract_functions_python(s):
                 token = next(tokens)
         except StopIteration:
             break
+    print("Standalone --Python-->-",functions_standalone)
+    print("class--Python--->",functions_class)
     return functions_standalone, functions_class
 
 
