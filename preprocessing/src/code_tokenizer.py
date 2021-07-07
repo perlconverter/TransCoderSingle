@@ -305,6 +305,8 @@ def extract_functions_python(s):
                 token = next(tokens)
         except StopIteration:
             break
+    print("standalone---python-->",functions_standalone)
+    print("class---python-->",functions_clas)
     return functions_standalone, functions_class
 
 
@@ -527,7 +529,7 @@ def extract_functions_java(s):
                 while token != ')':
                     i.next()
                     token=tokens[i.i]
-
+                print("token--->",token)
             # detect function
                 if token == ')' and (tokens[i.i + 1] == '{' ):
                 # go previous until the start of function
