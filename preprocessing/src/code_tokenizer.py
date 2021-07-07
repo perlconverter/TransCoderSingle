@@ -21,14 +21,14 @@ from preprocessing.src.timeout import timeout, TimeoutError
 from sacrebleu import tokenize_v14_international
 
 TOK_NO_SPACE_BEFORE = {',', ';'}
-clang.cindex.Config.set_library_path('/usr/lib/llvm-7/lib/')
+clang.cindex.Config.set_library_file('/usr/lib/x86_64-linux-gnu/libclang-6.0.so.1')
 STRINGS_AND_COMMENTS_TOKEN_KINDS = {TokenKind.LITERAL, TokenKind.COMMENT}
 logging.basicConfig(
     filename='timeout_cpp_tokenizer_examples.log', level=logging.DEBUG)
 
 idx = clang.cindex.Index.create()
 
-JAVA_TOKEN2CHAR1 = {'STOKEN0': "//",
+CPP_TOKEN2CHAR = {'STOKEN0': "//",
                    'STOKEN1': "/*",
                    'STOKEN2': "*/",
                    'STOKEN3': "/**",
@@ -36,7 +36,7 @@ JAVA_TOKEN2CHAR1 = {'STOKEN0': "//",
                    'STOKEN5': '"""',
                    'STOKEN6': '\\n'
                    }
-JAVA_CHAR2TOKEN1 = {"//": ' STOKEN0 ',
+CPP_CHAR2TOKEN = {"//": ' STOKEN0 ',
                    "/*": ' STOKEN1 ',
                    "*/": ' STOKEN2 ',
                    "/**": ' STOKEN3 ',
@@ -45,8 +45,8 @@ JAVA_CHAR2TOKEN1 = {"//": ' STOKEN0 ',
                    '\\n': ' STOKEN6 '
                    }
 
-CPP_TOKEN2CHAR = JAVA_TOKEN2CHAR1.copy()
-CPP_CHAR2TOKEN = JAVA_CHAR2TOKEN1.copy()
+#CPP_TOKEN2CHAR = JAVA_TOKEN2CHAR.copy()
+#CPP_CHAR2TOKEN = JAVA_CHAR2TOKEN.copy()
 
 PYTHON_TOKEN2CHAR = {'STOKEN0': '#',
                      'STOKEN1': "\\n",
@@ -66,11 +66,12 @@ JAVA_TOKEN2CHAR = {'STOKEN0': '#',
                      'STOKEN3': "'''"
                      }
 
-JAVA_CHAR2TOKEN = {'#': ' STOKEN0 ',
+JAVA_CHAR2TOKEN  = {'#': ' STOKEN0 ',
                      "\\n": ' STOKEN1 ',
                      '"""': ' STOKEN2 ',
                      "'''": ' STOKEN3 '
                      }
+
 
 
 class ind_iter(object):
@@ -522,15 +523,15 @@ def extract_functions_java(s):
     while True:
         try:
             # detect function
-            if token == ')' and tokens[i.i + 1] == '{':
+            if token == ')' and (tokens[i.i + 1] == '{' ):
                 # go previous until the start of function
                 while token not in [';', '}', '{', 'ENDCOM']:
                     i.prev()
                     token = tokens[i.i]
 
-               
+              
                 if token == 'ENDCOM':
-                    while token != '#':
+                    while token != '//':
                         i.prev()
                         token = tokens[i.i]
                     function = [token]
@@ -564,13 +565,14 @@ def extract_functions_java(s):
                         functions_standalone.append(function)
                     else:
                         functions_class.append(function)
-
             i.next()
             token = tokens[i.i]
         except KeyboardInterrupt:
             raise
         except:
             break
+    print("standalone---->",functions_standalone)
+    print("class------>",functions_class)
     return functions_standalone, functions_class
 
 
@@ -694,7 +696,7 @@ def extract_functions_cpp(s):
                         function = clean_hashtags_functions_cpp(function)
                         function = function.strip()
                         function = function.replace(
-                            '\n', 'ENDCOM').replace('SPACETOKEN', '▁')-
+                            '\n', 'ENDCOM').replace('SPACETOKEN', '▁')
                         if not re.sub('[^ ]*[ ][(][ ]\w*([ ][,][ ]\w*)*[ ][)]', "", function[:function.index('{')]).strip().startswith('{') and not function.startswith('#'):
                             functions_class.append(function)
             i.next()
