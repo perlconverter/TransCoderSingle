@@ -529,32 +529,43 @@ def extract_functions_java(s):
                 while token != ')':
                     i.next()
                     token=tokens[i.i]
-                print("token--->",token)
+                #print("token--->",token)
             # detect function
                 if token == ')' and (tokens[i.i + 1] == '{' ):
                 # go previous until the start of function
                     while token not in [';', '}', '{', 'ENDCOM']:
                         i.prev()
                         token = tokens[i.i]
+                     
 
               
                     if token == 'ENDCOM':
                         while token != '#':
                             i.prev()
                             token = tokens[i.i]
+                        if(token == 'if'):
+                            print("line--547")                                
                         function = [token]
                         while token != 'ENDCOM':
                             i.next()
                             token = tokens[i.i]
+                            if(token == 'if'):
+                                print("line--553")
+                                 
                             function.append(token)
                     else:
                         i.next()
                         token = tokens[i.i]
+                        if(token == 'if'):
+                            print("line--560")
+                                
                         function = [token]
 
                     while token != '{':
                         i.next()
                         token = tokens[i.i]
+                        if(token == 'if'):
+                            print("line--568")
                         function.append(token)
                     if token == '{':
                         number_indent = 1
@@ -566,6 +577,7 @@ def extract_functions_java(s):
                                     number_indent += 1
                                 elif token == '}':
                                     number_indent -= 1
+                                print("line--580")
                                 function.append(token)
                             except StopIteration:
                                 break
