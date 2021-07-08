@@ -74,6 +74,7 @@ JAVA_CHAR2TOKEN  = {'#': ' STOKEN0 ',
 
 
 
+
 class ind_iter(object):
     def __init__(self, len):
         self.i = 0
@@ -379,7 +380,6 @@ def tokenize_java(s, keep_comments=False):
         tokens = []
         assert isinstance(s, str)
         s = s.replace(r'\r', '')
-        
         tokens_generator = javalang_tok.tokenize(
             s, keep_comments=keep_comments)
         for token in tokens_generator:
@@ -508,8 +508,6 @@ def detokenize_java(s):
     return untok_s
 
 
-
-
 def extract_functions_java(s):
     tokens = s.split()
     #i = ind_iter(len(tokens))
@@ -517,7 +515,7 @@ def extract_functions_java(s):
     functions_standalone = []
     functions_class = []
     try:
-        token = tokens[i]
+        token = tokens[i.i]
     except KeyboardInterrupt:
         raise
     except:
@@ -581,7 +579,6 @@ def extract_functions_java(s):
     print("standalone---->",functions_standalone)
     print("class------>",functions_class)
     return functions_standalone, functions_class
-
 
 def extract_functions_java_with_docstring(function):
     ds = re.findall('[/][*].*?[*][/][ ]', function, re.DOTALL)
