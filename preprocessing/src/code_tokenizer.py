@@ -514,7 +514,8 @@ def detokenize_java(s):
 
 def extract_functions_java(s):
     tokens = s.split()
-    i = ind_iter(len(tokens))
+    #i = ind_iter(len(tokens))
+    i=0
     functions_standalone = []
     functions_class = []
     try:
@@ -527,67 +528,54 @@ def extract_functions_java(s):
         try:
             if token == 'sub':
                 while token != ')':
-                    i.next()
-                    token=tokens[i.i]
-                #print("token--->",token)
+                    #i.next()
+                    i=i+1
+                    token=tokens[i]
+
             # detect function
-                if token == ')' and (tokens[i.i + 1] == '{' ):
+                if token == ')' and (tokens[i + 1] == '{' ):
                 # go previous until the start of function
                     while token not in [';', '}', '{', 'ENDCOM']:
-                        i.prev()
-                        token = tokens[i.i]
-                     
-
-              
+                        #i.prev()
+                        token = tokens[i-1]
                     if token == 'ENDCOM':
                         while token != '#':
-                            i.prev()
-                            token = tokens[i.i]
-                        if(token == 'if'):
-                            print("line--547")                                
+                            #i.prev()
+                            token = tokens[i-1]
                         function = [token]
                         while token != 'ENDCOM':
-                            i.next()
-                            token = tokens[i.i]
-                            if(token == 'if'):
-                                print("line--553")
-                                 
+                            #i.next()
+                            token = tokens[i+1]
                             function.append(token)
                     else:
-                        i.next()
-                        token = tokens[i.i]
-                        if(token == 'if'):
-                            print("line--560")
-                                
+                        #i.next()
+                        token = tokens[i-1]
                         function = [token]
 
                     while token != '{':
-                        i.next()
-                        token = tokens[i.i]
-                        if(token == 'if'):
-                            print("line--568")
+                        #i.next()
+                        token = tokens[i+1]
                         function.append(token)
                     if token == '{':
                         number_indent = 1
                         while not (token == '}' and number_indent == 0):
                             try:
-                                i.next()
-                                token = tokens[i.i]
+                                #i.next()
+                                token = tokens[i+1]
                                 if token == '{':
                                     number_indent += 1
                                 elif token == '}':
                                     number_indent -= 1
-                                if(token == 'if'):
-                                    print("line--580")
                                 function.append(token)
                             except StopIteration:
                                 break
+
                         if '::' in function[0:function.index('(')]:
                             functions_standalone.append(function)
                         else:
                             functions_class.append(function)
-            i.next()
-            token = tokens[i.i]
+            #i.next()
+            token = tokens[i+1]
         except KeyboardInterrupt:
             raise
         except:
