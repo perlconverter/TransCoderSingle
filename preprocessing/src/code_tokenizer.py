@@ -523,6 +523,7 @@ def extract_functions_java(s):
     while True:
         try:
             if token == 'sub':
+                print(token)
                 while token != ')':
                     #i.next()
                     i=i+1
@@ -533,31 +534,37 @@ def extract_functions_java(s):
                 # go previous until the start of function
                     while token not in [';', '}', '{', 'ENDCOM']:
                         #i.prev()
-                        token = tokens[i-1]
+                        i=i-1
+                        token = tokens[i]
                     if token == 'ENDCOM':
                         while token != '#':
                             #i.prev()
-                            token = tokens[i-1]
+                            i=i-1
+                            token = tokens[i]
                         function = [token]
                         while token != 'ENDCOM':
                             #i.next()
-                            token = tokens[i+1]
+                            i=i+1
+                            token = tokens[i]
                             function.append(token)
                     else:
                         #i.next()
-                        token = tokens[i-1]
+                        i=i+1
+                        token = tokens[i]
                         function = [token]
 
                     while token != '{':
                         #i.next()
-                        token = tokens[i+1]
+                        i=i+1
+                        token = tokens[i]
                         function.append(token)
                     if token == '{':
                         number_indent = 1
                         while not (token == '}' and number_indent == 0):
                             try:
                                 #i.next()
-                                token = tokens[i+1]
+                                i=i+1
+                                token = tokens[i]
                                 if token == '{':
                                     number_indent += 1
                                 elif token == '}':
@@ -571,7 +578,9 @@ def extract_functions_java(s):
                         else:
                             functions_class.append(function)
             #i.next()
-            token = tokens[i+1]
+            #print(i)
+            i=i+1
+            token = tokens[i]
         except KeyboardInterrupt:
             raise
         except:
