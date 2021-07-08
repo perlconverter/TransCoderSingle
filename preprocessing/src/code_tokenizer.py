@@ -517,7 +517,7 @@ def extract_functions_java(s):
     functions_standalone = []
     functions_class = []
     try:
-        token = tokens[i.i]
+        token = tokens[i]
     except KeyboardInterrupt:
         raise
     except:
