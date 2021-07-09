@@ -109,9 +109,9 @@ class Language:
             executor = LocalExecutor()
         suffix = '.with_comments' if keep_comments else ''
         files = list(self.folder.glob(
-            f'train{suffix}.[01234567].functions_class.tok'))
+            f'train{suffix}.functions_class.tok'))
         files += list(self.folder.glob(
-            f'train{suffix}.[01234567].functions_standalone.tok'))
+            f'train{suffix}.functions_standalone.tok'))
         files.append(self.folder.joinpath(f'test{suffix}.functions_class.tok'))
         files.append(self.folder.joinpath(
             f'test{suffix}.functions_standalone.tok'))
