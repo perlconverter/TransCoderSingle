@@ -61,7 +61,7 @@ class Language:
                        stderr=subprocess.PIPE)
         split_len = (n_lines - 2 * test_size)
         for i in range(2 * test_size, n_lines, split_len):
-            subprocess.run(f"cat {all_tok} | head -n {i + split_len} | tail -n {split_len}  > {self.folder.joinpat1h(f'train{suffix}.tok')}", shell=True, stdout=subprocess.PIPE,
+            subprocess.run(f"cat {all_tok} | head -n {i + split_len} | tail -n {split_len}  > {self.folder.joinpath(f'train{suffix}.tok')}", shell=True, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
 
         return n_lines, size_gb
