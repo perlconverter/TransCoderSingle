@@ -1,4 +1,4 @@
-# Copyright (c) 2019-present, Facebook, Inc.
+ # Copyright (c) 2019-present, Facebook, Inc.
 # All rights reserved.
 #
 # This source code is licensed under the license found in the
@@ -59,9 +59,9 @@ class Language:
                        shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         subprocess.run(f"cat {all_tok} | head -n {2 * test_size} | tail -n {test_size}  > {self.folder.joinpath(f'test{suffix}.tok')}", shell=True, stdout=subprocess.PIPE,
                        stderr=subprocess.PIPE)
-        split_len = int((n_lines - 2 * test_size) / 8)
-        for n, i in zip(range(8), range(2 * test_size, n_lines, split_len)):
-            subprocess.run(f"cat {all_tok} | head -n {i + split_len} | tail -n {split_len}  > {self.folder.joinpath(f'train{suffix}.{n}.tok')}", shell=True, stdout=subprocess.PIPE,
+        split_len = (n_lines - 2 * test_size)
+        for i in range(2 * test_size, n_lines, split_len):
+            subprocess.run(f"cat {all_tok} | head -n {i + split_len} | tail -n {split_len}  > {self.folder.joinpat1h(f'train{suffix}.tok')}", shell=True, stdout=subprocess.PIPE,
                            stderr=subprocess.PIPE)
 
         return n_lines, size_gb
@@ -187,7 +187,7 @@ class Dataset:
             f"regroup and select data for training bpe in {data_train_bpe} ...")
         regroup_and_select_data(
             files=[l.folder.glob(
-                f'train{self.suffix}.[01234567].tok') for l in self.langs],
+                f'train{self.suffix}.tok') for l in self.langs],
             nlines=nlines,
             output=data_train_bpe)
 
@@ -213,10 +213,10 @@ class Dataset:
         print(f"regroup and select data in {data_get_vocab} to get vocab ...")
         regroup_and_select_data(
             files=[self.folder.glob(
-                f'{l.l}.train{self.suffix}.[01234567].bpe') for l in self.langs],
+                f'{l.l}.train{self.suffix}.bpe') for l in self.langs],
             nlines=nlines,
             output=data_get_vocab)
-        print(f"computing vocab on {data_get_vocab}...")
+        print(f"computing vocab on {data_get_vocab}...") 
         get_vocab_file(data_get_vocab, self.vocab)
 
     def apply_bpe(self, files_regex, use_vocab=False, executor=None):
@@ -265,7 +265,7 @@ class Dataset:
 
         print("apply bpe on train ... ")
         self.apply_bpe(
-            f'train{self.suffix}.[01234567].functions_*.tok', use_vocab=False, executor=bpe_executor)
+            f'train{self.suffix}.functions_*.tok', use_vocab=False, executor=bpe_executor)
         print("apply bpe on test and valid ...")
         self.apply_bpe(f'test{self.suffix}.functions_*.tok',
                        use_vocab=False, executor=bpe_executor)
