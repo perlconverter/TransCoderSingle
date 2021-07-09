@@ -524,7 +524,7 @@ def extract_functions_java(s):
         try:
             if token == 'sub':
                 #print(token)
-                while token != '{':
+                while token not in ['{','(']:
                     #i.next()
                     i=i+1
                     token=tokens[i]
@@ -532,7 +532,7 @@ def extract_functions_java(s):
                     ##exit()
                 #exit()
             # detect function
-                if  (tokens[i] == '{' ):
+                if  (tokens[i] == '{' or token[i] == '(' ):
                     #print(token)
                     i=i-1
                     token=tokens[i]
