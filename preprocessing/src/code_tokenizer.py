@@ -523,27 +523,33 @@ def extract_functions_java(s):
     while True:
         try:
             if token == 'sub':
-                print(token)
+                #print(token)
                 while token != '{':
                     #i.next()
                     i=i+1
                     token=tokens[i]
-                
-
+                    #print(token)
+                    ##exit()
+                #exit()
             # detect function
-                if token == '{' :
-                    i=i-1;
-                    token = token[i]
+                if  (tokens[i] == '{' ):
+                    #print(token)
+                    i=i-1
+                    token=tokens[i]
                 # go previous until the start of function
                     while token not in [';', '}', '{', 'ENDCOM']:
                         #i.prev()
                         i=i-1
                         token = tokens[i]
+                        #print(token)
+                    #exit()
                     if token == 'ENDCOM':
+                        #print(token)
                         while token != '#':
                             #i.prev()
                             i=i-1
                             token = tokens[i]
+                        #print(token)
                         function = [token]
                         while token != 'ENDCOM':
                             #i.next()
@@ -575,11 +581,12 @@ def extract_functions_java(s):
                                 function.append(token)
                             except StopIteration:
                                 break
-
+                        #print(function)
                         if '::' in function[0:function.index('{')]:
                             functions_standalone.append(' '.join(function))
                         else:
                             functions_class.append(' '.join(function))
+                        
             #i.next()
             #print(i)
             i=i+1
