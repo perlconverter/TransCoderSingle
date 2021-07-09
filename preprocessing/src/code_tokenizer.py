@@ -583,9 +583,9 @@ def extract_functions_java(s):
                                 break
                         #print(function)
                         if '::' in function[0:function.index('{')]:
-                            functions_standalone.append(' '.join(function))
-                        else:
                             functions_class.append(' '.join(function))
+                        else:
+                            functions_standalone.append(' '.join(function))
                         
             #i.next()
             #print(i)
